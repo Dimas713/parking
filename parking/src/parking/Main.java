@@ -1,7 +1,10 @@
 package parking;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.LinkedList; 
 import java.util.Queue;
 import java.util.Random;
+import java.util.Scanner;
 
 class ParkingLot
 {
@@ -78,7 +81,7 @@ class ParkingLot
 
 public class Main {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FileNotFoundException {
 		int time = 0;
 		// create instance of Random class 
         Random rand = new Random(); 
@@ -88,7 +91,12 @@ public class Main {
 	    Queue<Car> entrance = new LinkedList<>();
 	    Queue<Car> exit = new LinkedList<>();
 	    
-	    int num_of_Cars = 100;
+	  
+	    
+	      Scanner sc = new Scanner(new File("test1.txt"));
+	      int num = sc.nextInt();
+	      int num_of_Cars = num;
+	    
 	 
 	    
 	    //Adds car objects to the entrance  queue
