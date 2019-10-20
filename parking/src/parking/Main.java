@@ -127,7 +127,16 @@ public class Main {
 	    
 	   //bubble sort car array so i can have the timeParked at the beginning and 
 	    //cars that will be parked longer at the end
-	        int n = LotA.space.length; 
+	    int n;
+	    if(num_of_Cars < LotA.capacity)
+	    {
+	    	 n = num_of_Cars;
+	    }
+	    else
+	    {
+	    	n = LotA.space.length;
+	    }
+	  
 	        for (int i = 0; i < n-1; i++) 
 	            for (int j = 0; j < n-i-1; j++) 
 	                if (LotA.space[j].time_parked > LotA.space[j+1].time_parked) 
@@ -155,23 +164,39 @@ public class Main {
 	        			
 	        			//bubble sort car array so i can have the timeParked at the beginning and 
 	        		    //cars that will be parked longer at the end
-	        			 n = LotA.space.length; 
-	        	        for (int i = 0; i < n-1; i++) 
-	        	            for (int j = 0; j < n-i-1; j++) 
-	        	                if (LotA.space[j].time_parked > LotA.space[j+1].time_parked) 
-	        	                { 
-	        	                    // swap LotA.space[j+1] and LotA.space[i] 
-	        	                    Car temp = LotA.space[j]; 
-	        	                    LotA.space[j] = LotA.space[j+1]; 
-	        	                    LotA.space[j+1] = temp; 
-	        	                } 	
+	        			if(num_of_Cars < LotA.capacity)
+	        		    {
+	        		    	 n = num_of_Cars;
+	        		    }
+	        		    else
+	        		    {
+	        		    	n = LotA.space.length;
+	        		    }
+	        		  
+	        		        for (int i = 0; i < n-1; i++) 
+	        		            for (int j = 0; j < n-i-1; j++) 
+	        		                if (LotA.space[j].time_parked > LotA.space[j+1].time_parked) 
+	        		                { 
+	        		                    // swap LotA.space[j+1] and LotA.space[i] 
+	        		                    Car temp = LotA.space[j]; 
+	        		                    LotA.space[j] = LotA.space[j+1]; 
+	        		                    LotA.space[j+1] = temp; 
+	        		                } 	
 	        			
 	        			
 	        		}
 	        	}
 	        	else
 	        	{
-	        		for(int i =0; i < LotA.space.length; i++)
+	        		if(num_of_Cars < LotA.capacity)
+	        		{
+	        			n = num_of_Cars;
+	        		}
+	        		else
+	        		{
+	        			n = LotA.space.length;
+	        		}
+	        		for(int i =0; i < n; i++)
 	        		{
 	        			time = time + (LotA.space[i].time_parked - time);
 	        			exit.add(LotA.space[i]);
@@ -189,8 +214,8 @@ public class Main {
 			exit.remove();
 		}
 		
-		System.out.println("It took " + time + " hours to make " + LotA.Total_Profit + 
-											" dollars with a traffic of "+  num_of_Cars + " cars");
+		System.out.println("It took " + time + " hours to make " + LotA.Total_Profit + " dollars at "+
+							 LotA.Cost_Per_HR + " per hour with a traffic of "+  num_of_Cars + " cars");
 		
 		System.out.println("end of program..");
 
