@@ -5,19 +5,22 @@ import java.util.Random;
 
 class ParkingLot
 {
-    private int    Total_Profit; 
-    private int    Cost_Per_HR;
+    public int    Total_Profit; 
+    public int    Cost_Per_HR = 10;
     private boolean full;
+    private boolean empty;
     public int capacity = 100;
     Car[] space = new Car[capacity];
     
     public ParkingLot()
     {
+    	Total_Profit = 0;
     	for(int i=0; i < capacity; i++)
     	{
     		space[i] = null;
     	}
     }
+    
     
     
     public boolean is_full()
@@ -37,6 +40,23 @@ class ParkingLot
     	return full;
     }
     
+    public boolean is_empty()
+    {
+    	for(int i=0; i < capacity; i++)
+    	{
+    		if(space[i] == null)
+    		{
+    			empty = true;
+    		}
+    		else
+    		{
+    			full = false;
+    			break;
+    		}
+    	}
+    	return empty;
+    }
+    
  };
  
  class Car extends ParkingLot
@@ -44,25 +64,29 @@ class ParkingLot
 	 private boolean is_Parked; 
 	 private double time_In;
 	 private double time_out;
-	 private double time_parked;
+	 public int time_parked;
 	 
-	public Car(double wait_time)
+	public Car(int wait_time)
 	 {
 		time_parked = wait_time ;
 	 }
 	
 	
   };
+  
+  
 
 public class Main {
 
 	public static void main(String[] args) {
+		int time = 0;
 		// create instance of Random class 
         Random rand = new Random(); 
 	
 		System.out.println("Creating Parking Lot...");
 		ParkingLot LotA = new ParkingLot();
 	    Queue<Car> entrance = new LinkedList<>();
+	    Queue<Car> exit = new LinkedList<>();
 	    
 	    int num_of_Cars = 100;
 	 
@@ -98,7 +122,75 @@ public class Main {
 	    	}
 	    	
 	    }
+	    
+	    System.out.println("The parking lot will start recording profit at hour 0");
+	    
+	   //bubble sort car array so i can have the timeParked at the beginning and 
+	    //cars that will be parked longer at the end
+	        int n = LotA.space.length; 
+	        for (int i = 0; i < n-1; i++) 
+	            for (int j = 0; j < n-i-1; j++) 
+	                if (LotA.space[j].time_parked > LotA.space[j+1].time_parked) 
+	                { 
+	                    // swap LotA.space[j+1] and LotA.space[i] 
+	                    Car temp = LotA.space[j]; 
+	                    LotA.space[j] = LotA.space[j+1]; 
+	                    LotA.space[j+1] = temp; 
+	                } 
+	    
+	        //simulates a car coming into the lot from the entrance queue
+	        //once the car is done being parked it will go to the exit queue
+	        while(!LotA.is_empty())
+	        {
+	        	if(entrance.peek() != null)
+	        	{
+	        		if(LotA.space[0] != null)
+	        		{
+	        			time = time + (LotA.space[0].time_parked - time);
+	        			exit.add(LotA.space[0]);
+	        			
+	        			LotA.space[0] = entrance.peek();
+	        			entrance.remove();
+	        			
+	        			
+	        			//bubble sort car array so i can have the timeParked at the beginning and 
+	        		    //cars that will be parked longer at the end
+	        			 n = LotA.space.length; 
+	        	        for (int i = 0; i < n-1; i++) 
+	        	            for (int j = 0; j < n-i-1; j++) 
+	        	                if (LotA.space[j].time_parked > LotA.space[j+1].time_parked) 
+	        	                { 
+	        	                    // swap LotA.space[j+1] and LotA.space[i] 
+	        	                    Car temp = LotA.space[j]; 
+	        	                    LotA.space[j] = LotA.space[j+1]; 
+	        	                    LotA.space[j+1] = temp; 
+	        	                } 	
+	        			
+	        			
+	        		}
+	        	}
+	        	else
+	        	{
+	        		for(int i =0; i < LotA.space.length; i++)
+	        		{
+	        			time = time + (LotA.space[i].time_parked - time);
+	        			exit.add(LotA.space[i]);
+	        			LotA.space[i] = null;
+	        		}
+	        	}
+	        	
+	        }
+	        
+	        //eventually the parking lot will be empty and you can process the exit queue
+	        //will add the amount of hr each car stayed to calculate the profit
+		while(exit.peek() != null)
+		{
+			LotA.Total_Profit = LotA.Total_Profit + (exit.peek().time_parked * LotA.Cost_Per_HR);
+			exit.remove();
+		}
 		
+		System.out.println("It took " + time + " hours to make " + LotA.Total_Profit + 
+											" dollars with a traffic of "+  num_of_Cars + " cars");
 		
 		System.out.println("end of program..");
 
